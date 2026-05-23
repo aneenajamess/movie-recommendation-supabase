@@ -2,20 +2,22 @@ from db import supabase
 
 
 def update_rating(title):
-    response=supabase.table("movierec_usermovies").select("*").eq("TITLE",title).execute()
+    titlekey=title.strip().lower()
+    response=supabase.table("movierec_usermovies").select("*").eq("TITLE_KEY",titlekey).execute()
     ratings = [r["RATING"] for r in response.data]
 
     avg=sum(ratings)/len(ratings)
     supabase.table("movierec_allmovies").update({
-        "AVERAGE RATING":avg}).eq("TITLE",title).execute()
+        "AVERAGE RATING":avg}).eq("TITLE_KEY",titlekey).execute()
 
 
 def add_rating(user_id,title, genre, rating):
-    title=title.strip().title()
-    genre=genre.strip().title()
+    titlekey=title.strip().lower()
+    genre=genre.strip().lower()
     data={
         "USER ID":user_id,
         "TITLE": title,
+        "TITLE_KEY":titlekey,
         "GENRE": genre,
         "RATING": rating
     }
@@ -26,11 +28,12 @@ def add_rating(user_id,title, genre, rating):
         print("Already rated the movie!")
 
 
-    existing=supabase.table("movierec_allmovies").select("*").eq("TITLE",title).execute()
+    existing=supabase.table("movierec_allmovies").select("*").eq("TITLE_KEY",titlekey).execute()
 
     if not existing.data:
         moviedata={
             "TITLE":title,
+            "TITLE_KEY":titlekey,
             "GENRE":genre,
             "AVERAGE RATING":rating
         }

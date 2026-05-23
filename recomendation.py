@@ -6,7 +6,7 @@ def movie_rec(userid):
     response=supabase.table("movierec_usermovies").select("*").eq("USER ID",userid).execute()
 
     genres = [g["GENRE"] for g in response.data]
-    titlelist=[t["TITLE"] for t in response.data]
+    titlelist=[t["TITLE_KEY"] for t in response.data]
     
     if not genres:
         print("No Movies watched yet!")
@@ -19,8 +19,8 @@ def movie_rec(userid):
 
     recommendation=[]
     for m in mov.data:
-        if m["TITLE"] not in titlelist:
-            recommendation.append(m["TITLE"])
+        if m["TITLE_KEY"] not in titlelist:
+            recommendation.append(m["TITLE_KEY"])
 
     if not recommendation:
         print("No new movies left to recommend!")
