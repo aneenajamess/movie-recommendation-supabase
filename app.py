@@ -40,13 +40,11 @@ while True:
          if action == "1":
 
             title = input("Movie title: ")
-            genre = input("Genre: ")
             rating = int(input("Rating (1-5): "))
 
             add_rating(
                 user["USER ID"],
                 title,
-                genre,
                 rating
             )
 

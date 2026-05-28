@@ -1,4 +1,5 @@
 from db import supabase
+from omdb import get_movie
 
 
 def update_rating(title):
@@ -11,9 +12,17 @@ def update_rating(title):
         "AVERAGE RATING":avg}).eq("TITLE_KEY",titlekey).execute()
 
 
-def add_rating(user_id,title, genre, rating):
+def add_rating(user_id,title,rating):
+    moviedata=get_movie(title)
+    if moviedata["Response"]=="False":
+        print("Movie not found!")
+        return
+    else:
+        title=moviedata["Title"]
+        genre=moviedata["Genre"]
+
     titlekey=title.strip().lower()
-    genre=genre.strip().lower()
+    
     data={
         "USER ID":user_id,
         "TITLE": title,
@@ -45,3 +54,12 @@ def add_rating(user_id,title, genre, rating):
         
     print("Reviewed Sucessfully!")
 
+
+
+"""input moviename-> 
+checkif movie exists->
+if yes fetch details->
+check if movie alr there in movierec usermovies->
+else add it to movirec usermovies-> 
+check if its there in all movies, if no add it there asw, -> 
+else update rating"""
