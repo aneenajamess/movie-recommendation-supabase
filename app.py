@@ -2,6 +2,8 @@ from auth import signup, login
 from ratings import add_rating
 from recomendation import movie_rec
 from movie_info import get_movie_info
+from db import supabase
+
 while True:
  print("1. Signup")
  print("2. Login")
@@ -12,26 +14,33 @@ while True:
  if choice == "1":
 
     username = input("Username: ")
+    email=input("Email: ")
     password = input("Password: ")
 
-    signup(username, password)
+    signup(email,password,username)
+
+    
+
 
  elif choice == "2":
     
-
-    username = input("Username: ")
+    email = input("Email: ")
     password = input("Password: ")
 
-    user = login(username, password)
-
+    user = login(email,password)
+    
     if not user:
         print("Invalid login") 
+        
 
     else:
-        print("Welcome", user["USERNAME"])
-        while True:
+        
+        profile = supabase.table("movierec_users").select("*").eq("EMAIL", email).execute()
+        user_id = profile.data[0]["USER ID"]
+        username = profile.data[0]["USERNAME"]
 
-         
+
+        while True:
 
          print("1. Add Review")
          print("2. Get Recommendation")
@@ -46,14 +55,14 @@ while True:
             rating = int(input("Rating (1-5): "))
 
             add_rating(
-                user["USER ID"],
+                user_id,
                 title,
                 rating
             )
 
          elif action == "2":
 
-            movie_rec(user["USER ID"])
+            movie_rec(user_id)
 
          elif action=="3":
             title=input("Enter Title: ")
