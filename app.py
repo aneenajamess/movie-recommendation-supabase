@@ -1,6 +1,7 @@
 from auth import signup, login
 from ratings import add_rating
 from recomendation import movie_rec
+from movie_info import get_movie_info
 while True:
  print("1. Signup")
  print("2. Login")
@@ -27,13 +28,15 @@ while True:
         print("Invalid login") 
 
     else:
+        print("Welcome", user["USERNAME"])
         while True:
 
-         print("Welcome", user["USERNAME"])
+         
 
          print("1. Add Review")
          print("2. Get Recommendation")
-         print("3. Logout")
+         print("3. Get Information about Movie")
+         print("4. Logout")
 
          action = input("Choose: ")
 
@@ -51,7 +54,13 @@ while True:
          elif action == "2":
 
             movie_rec(user["USER ID"])
+
+         elif action=="3":
+            title=input("Enter Title: ")
+            get_movie_info(title)
          else:
             break
+   
  else:
-    break
+   print("See you again!")
+   break
